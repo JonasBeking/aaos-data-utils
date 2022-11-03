@@ -1,5 +1,5 @@
 {
-  "name": "aaos-data-utils",
+  "name": "@capacitor-community/aaos-data-utils",
   "version": "0.0.1",
   "description": "Data Utils for communicating with Android Automotive OS",
   "main": "dist/plugin.cjs.js",
@@ -37,7 +37,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api AAOSDataUtilsPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api VehicleDataService --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
