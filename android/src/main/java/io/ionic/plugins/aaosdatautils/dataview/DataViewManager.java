@@ -1,20 +1,21 @@
 package io.ionic.plugins.aaosdatautils.dataview;
 
 import com.getcapacitor.Bridge;
-import com.getcapacitor.JSObject;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
 import java.util.HashMap;
 
 import io.ionic.plugins.aaosdatautils.datacallback.DataCallbackBuilder;
 import io.ionic.plugins.aaosdatautils.dataerror.DataViewUnknownException;
+import io.ionic.plugins.aaosdatautils.dataevent.DataEvent;
 
 public abstract class DataViewManager<T> {
 
     public HashMap<String, DataView<T>> dataViewMap = new HashMap<>();
     protected DataCallbackBuilder<T> dataCallbackBuilder;
 
-    public DataView<T> generate(PluginCall pluginCall, String addressableName, Boolean isActive, Boolean overwriteOldEvents) {
-        DataView<T> dataView = isActive ? new ActiveDataView<>(pluginCall, null, overwriteOldEvents) : new PassiveDataView<>(null, overwriteOldEvents);
+    public DataView<T> generate(PluginCall pluginCall, String addressableName, Boolean isActive) {
+        DataView<T> dataView = isActive ? new ActiveDataView<>(pluginCall, null) : new PassiveDataView<>(null);
         T callback = this.dataCallbackBuilder.build(dataView);
         dataView.setCallback(callback);
         if(addressableName == null) {
@@ -24,8 +25,8 @@ public abstract class DataViewManager<T> {
         return dataView;
     }
 
-    public DataView<T> generate(PluginCall pluginCall, Integer dataId,String addressableName, Boolean isActive, Boolean overwriteOldEvents) {
-        DataView<T> dataView = isActive ? new ActiveDataView<>(pluginCall, dataId, overwriteOldEvents) : new PassiveDataView<>(dataId, overwriteOldEvents);
+    public DataView<T> generate(PluginCall pluginCall, Integer dataId,String addressableName, Boolean isActive) {
+        DataView<T> dataView = isActive ? new ActiveDataView<>(pluginCall, dataId) : new PassiveDataView<>(dataId);
         T callback = this.dataCallbackBuilder.build(dataView);
         dataView.setCallback(callback);
         if(addressableName == null) {
@@ -51,19 +52,20 @@ public abstract class DataViewManager<T> {
         return dataView;
     }
 
-    public JSObject view(String addressableName) {
+    public DataEvent view(String addressableName) {
         DataView<T> desiredDataView = this.dataViewMap.get(addressableName);
         if(desiredDataView == null) {
             throw new DataViewUnknownException(addressableName);
         }
-        return desiredDataView.getOldestEvent();
+        return desiredDataView.getMostRecentEvent();
     }
 
-    public void setDataViewOverwriteOldEvents(String addressableName,Boolean overwriteOldEvents) throws UnsupportedOperationException {
+    public JSArray viewAll(String addressableName) {
         DataView<T> desiredDataView = this.dataViewMap.get(addressableName);
         if(desiredDataView == null) {
             throw new DataViewUnknownException(addressableName);
         }
-        desiredDataView.setOverwriteOldEvents(overwriteOldEvents);
+        return desiredDataView.getAllEvents();
     }
+
 }

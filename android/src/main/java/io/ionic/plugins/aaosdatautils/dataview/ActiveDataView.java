@@ -3,12 +3,15 @@ package io.ionic.plugins.aaosdatautils.dataview;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
 
+import io.ionic.plugins.aaosdatautils.dataevent.DataErrorEvent;
+import io.ionic.plugins.aaosdatautils.dataevent.DataEvent;
+
 public class ActiveDataView<T> extends DataView<T> {
 
     protected PluginCall pluginCall;
 
-    public ActiveDataView(PluginCall pluginCall, Integer dataId, Boolean overwriteOldEvents) {
-        super(dataId,overwriteOldEvents);
+    public ActiveDataView(PluginCall pluginCall, Integer dataId) {
+        super(dataId);
         this.pluginCall = pluginCall;
         this.pluginCall.setKeepAlive(true);
     }
@@ -18,22 +21,15 @@ public class ActiveDataView<T> extends DataView<T> {
     }
 
     public void resolvePluginCall() {
-        JSObject property = this.getOldestEvent();
-        if(property == null) {
-            this.pluginCall.errorCallback("Failed getting value for dataId: " + this.dataId);
+        DataEvent dataEvent = this.getMostRecentEvent();
+        if(dataEvent == null) {
+            new DataErrorEvent("No value for dataId: " + this.dataId + "currently available");
+            return;
         }
-        else{
-            JSObject ret = new JSObject();
-            ret.put("res", this.getOldestEvent());
-            this.pluginCall.resolve(ret);
+        if(dataEvent instanceof DataErrorEvent) {
+            this.pluginCall.errorCallback(dataEvent.toString());
+            return;
         }
-    }
-
-    @Override
-    public void setOverwriteOldEvents(boolean overwriteOldEvents) throws UnsupportedOperationException {
-        if(!overwriteOldEvents) {
-            throw new UnsupportedOperationException("Cannot use 'overwriteOldEvents' flag on ActiveDataView");
-        }
-        super.setOverwriteOldEvents(true);
+        this.pluginCall.resolve(dataEvent);
     }
 }

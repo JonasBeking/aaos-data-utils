@@ -1,21 +1,23 @@
 export type DataViewCallback<VehicleDataEventType> = (message : VehicleDataEventType | null, err?: any) => void;
 export type CallbackID = string;
 
-export interface VehicleDataEvent {
+export interface VehicleEvent{
   timestamp : number,
-  event : string,
+  event : number
+}
+
+export interface VehicleDataEvent extends VehicleEvent{
   data : any
 }
 
-export interface VehicleErrorEvent {
-  timestamp : number,
-  event : "error",
+export interface VehicleErrorEvent extends VehicleEvent{
+  event : -1,
   reason : string
 }
 
-export type PermissionsStatus<T extends string> = {[key in T] : 'denied' | 'granted'}
+export type PermissionStates<T extends string> = {[key in T] : 'denied' | 'granted'}
 
-export interface VehicleDataService<VehicleDataEventType extends VehicleDataEvent>{
+export interface VehicleDataService<VehicleDataEventType extends VehicleDataEvent, VehicleErrorEventType extends VehicleErrorEvent>{
   /**
    * Generates an active view on the side of android: The view will pass data on a callback so no active polling is
    * required on the WebView side
@@ -46,28 +48,28 @@ export interface VehicleDataService<VehicleDataEventType extends VehicleDataEven
   }) : Promise<void>
 
   /**
-   * Gets the value of a previously registered view.
+   * Gets the most recent event received by the view
    * @param options
    */
   view(options : {
     addressableName : string
-  }) : Promise<VehicleDataEventType | VehicleErrorEvent>
+  }) : Promise<VehicleDataEventType | VehicleErrorEventType>
 
   /**
-   * Tell a registered view to discord or keep old events to poll later on
+   * Gets the latest 16 events received by the view
    * @param options
    */
-  setDataViewOverwriteOldEvents(options : {
-    addressableName : string,
-    overwriteOldEvents: boolean
-  }) : Promise<void>
+  viewAll(options : {
+    addressableName : string
+  }) : Promise<{events : Array<VehicleDataEventType | VehicleErrorEventType>}>
+
 }
 
-export interface RestrictedVehicleDataService<VehicleDataEventType extends VehicleDataEvent, PermissionType extends string> extends VehicleDataService<VehicleDataEventType>{
+export interface RestrictedVehicleDataService<VehicleDataEventType extends VehicleDataEvent, VehicleErrorEventType extends VehicleErrorEvent, PermissionType extends string> extends VehicleDataService<VehicleDataEventType,VehicleErrorEventType>{
   /**
    * Gets the status for all permissions
    */
-  checkPermissions() : Promise<PermissionsStatus<PermissionType>>
+  checkPermissions() : Promise<PermissionStates<PermissionType>>
 
   /**
    * Requests the permissions passed to it or if nothing is passed, requests all permissions known to the plugin
@@ -75,5 +77,5 @@ export interface RestrictedVehicleDataService<VehicleDataEventType extends Vehic
    */
   requestPermissions(options : {
     permissions : PermissionType[]
-  }) : Promise<PermissionsStatus<PermissionType>>
+  }) : Promise<PermissionStates<PermissionType>>
 }

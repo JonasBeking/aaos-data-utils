@@ -1,3 +1,5 @@
+import nodeResolve from "@rollup/plugin-node-resolve";
+
 export default {
   input: 'dist/esm/index.js',
   output: [
@@ -7,6 +9,7 @@ export default {
       name: 'capacitorAAOSDataUtils',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        '@trapezedev/project' : 'trapezeExports'
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +21,6 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  plugins :[nodeResolve()],
+  external: ['@capacitor/core','@trapezedev/project'],
 };

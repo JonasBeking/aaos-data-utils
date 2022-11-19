@@ -3,7 +3,7 @@ package io.ionic.plugins.aaosdatautils.dataerror;
 
 import com.getcapacitor.PluginCall;
 
-import io.ionic.plugins.aaosdatautils.dataevent.ErrorEvent;
+import io.ionic.plugins.aaosdatautils.dataevent.DataErrorEvent;
 
 
 //TODO properly implement the exceptions as toString should not be the method to get the propert message
@@ -14,7 +14,7 @@ public class DataErrorHandler {
     }
 
     protected void finish(String reason, PluginCall pluginCall) {
-        ErrorEvent errorEvent = new ErrorEvent(reason);
-        pluginCall.errorCallback(errorEvent.toString());
+        DataErrorEvent dataErrorEvent = new DataErrorEvent(reason);
+        pluginCall.errorCallback(dataErrorEvent.toString());
     }
 }

@@ -1,27 +1,41 @@
 package io.ionic.plugins.aaosdatautils.dataview;
 
-import com.getcapacitor.JSObject;
+import com.getcapacitor.JSArray;
+import io.ionic.plugins.aaosdatautils.dataevent.DataEvent;
 
 public class RingBuffer {
 
     private final int size = 16;
     private int read = 0;
     private int write = 0;
-    private final JSObject[] buffer = new JSObject[size];
+    private final DataEvent[] buffer = new DataEvent[size];
 
-    void add(JSObject data) {
-        buffer[write] = data;
-        write = (write + 1) & (size-1);
+    private void incrementRead() {
+        this.read = (this.read + 1) & (this.size - 1);
     }
 
-    void overwriteRead(JSObject data) {
-        buffer[read] = data;
+    private void incrementWrite() {
+        this.write = (this.write + 1) & (this.size - 1);
     }
 
-    JSObject get() {
-        JSObject data = buffer[read];
-        buffer[read] = null;
-        read = (read + 1) & (size-1);
-        return data;
+    void add(DataEvent data) {
+        this.incrementWrite();
+        this.buffer[this.write] = data;
+        this.read = this.write;
+    }
+
+    DataEvent get() {
+        return this.buffer[this.read];
+    }
+
+    public JSArray getAllEvents() {
+        JSArray chronoOrderedEvents = new JSArray();
+
+        int bufferIndex = this.read;
+        for(int i = 0; i < this.size; i++) {
+            chronoOrderedEvents.put(this.buffer[bufferIndex]);
+            bufferIndex = (bufferIndex - 1) & (this.size - 1);
+        }
+        return chronoOrderedEvents;
     }
 }

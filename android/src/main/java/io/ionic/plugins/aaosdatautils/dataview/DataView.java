@@ -1,37 +1,30 @@
 package io.ionic.plugins.aaosdatautils.dataview;
 
-import com.getcapacitor.JSObject;
+import com.getcapacitor.JSArray;
+
+import io.ionic.plugins.aaosdatautils.dataevent.DataEvent;
 
 public abstract class DataView<T> {
 
     protected int dataId;
-    private boolean overwriteOldEvents;
-    private JSObject mostRecentEvent;
-    //List<JSObject> events = new ArrayList<>();
     RingBuffer events = new RingBuffer();
 
     private T callback;
 
-    public DataView(Integer dataId, Boolean overwriteOldEvents) {
+    public DataView(Integer dataId) {
         this.dataId = dataId;
-        this.setOverwriteOldEvents(overwriteOldEvents);
     }
 
-    public void insertEvent(JSObject event) {
-        this.mostRecentEvent = event;
-        if(this.overwriteOldEvents) {
-            this.events.overwriteRead(event);
-        }
-        else{
-            this.events.add(event);
-        }
+    public void insertEvent(DataEvent dataEvent) {
+        this.events.add(dataEvent);
     }
 
-    public JSObject getOldestEvent() {
-        if(this.overwriteOldEvents) {
-            return this.mostRecentEvent;
-        }
+    public DataEvent getMostRecentEvent() {
         return this.events.get();
+    }
+
+    public JSArray getAllEvents() {
+        return this.events.getAllEvents();
     }
 
     public T getCallback() {
@@ -42,7 +35,4 @@ public abstract class DataView<T> {
         this.callback = callback;
     }
 
-    public void setOverwriteOldEvents(boolean overwriteOldEvents) throws UnsupportedOperationException{
-        this.overwriteOldEvents = overwriteOldEvents;
-    }
 }
