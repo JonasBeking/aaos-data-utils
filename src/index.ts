@@ -119,4 +119,3 @@ export abstract class RestrictedVehicleDataProxy<VehicleDataEventType extends Ve
 }
 
 export * from './definitions';
-export * from './configuration'
