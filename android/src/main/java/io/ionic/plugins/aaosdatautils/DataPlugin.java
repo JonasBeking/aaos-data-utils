@@ -57,7 +57,7 @@ public class DataPlugin<T> extends Plugin {
      * declaration in form of an annotation
      */
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
-    void generateActiveView(PluginCall call) {
+    public void generateActiveView(PluginCall call) {
         this.processingChain.executeWithFinal(call, pluginCall -> {
             Integer dataId = pluginCall.getInt("dataId");
             String addressableName = pluginCall.getString("addressableName");
@@ -69,7 +69,7 @@ public class DataPlugin<T> extends Plugin {
     }
 
     @PluginMethod()
-    void generatePassiveView(PluginCall call) {
+    public void generatePassiveView(PluginCall call) {
         this.processingChain.executeWithFinal(call, pluginCall -> {
             Integer dataId = pluginCall.getInt("dataId");
             String addressableName = pluginCall.getString("addressableName");
@@ -83,7 +83,7 @@ public class DataPlugin<T> extends Plugin {
     }
 
     @PluginMethod()
-    void removeView(PluginCall call) {
+    public void removeView(PluginCall call) {
         this.processingChain.executeWithFinal(call, pluginCall -> {
             String addressableName = pluginCall.getString("addressableName");
             if(addressableName == null) {
@@ -95,7 +95,7 @@ public class DataPlugin<T> extends Plugin {
     }
 
     @PluginMethod()
-    void view(PluginCall call) {
+    public void view(PluginCall call) {
         this.processingChain.executeWithFinal(call,pluginCall -> {
             String addressableName = pluginCall.getString("addressableName");
             if(addressableName == null) {

@@ -35,7 +35,6 @@ export interface VehicleDataService<VehicleDataEventType extends VehicleDataEven
    */
   generatePassiveView(options : {
     dataId : number,
-    overwriteOldEvents : boolean,
     addressableName? : string
   }) : Promise<void>
 

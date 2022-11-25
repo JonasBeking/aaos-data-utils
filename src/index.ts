@@ -16,6 +16,7 @@ export abstract class VehicleDataProxy<VehicleDataEventType extends VehicleDataE
   }
 
   generateActiveView(dataId : number, callback : (dataEvent : VehicleDataEventType | null, err? : any) => void, addressableName? : string) : Promise<void> {
+    console.log("Attempting to generate active view")
     return this.dataService.generateActiveView({
       dataId : dataId,
       addressableName: addressableName
@@ -36,10 +37,9 @@ export abstract class VehicleDataProxy<VehicleDataEventType extends VehicleDataE
     })
   }
 
-  generatePassiveView(dataId : number, overwriteOldEvents : boolean, addressableName? : string) : Promise<void> {
+  generatePassiveView(dataId : number, addressableName? : string) : Promise<void> {
     return this.dataService.generatePassiveView({
       dataId : dataId,
-      overwriteOldEvents : overwriteOldEvents,
       addressableName: addressableName
     }).then(() => {
       console.log(`Successfully registered Passive Property View for propertyId: ${dataId} - ${addressableName}`)

@@ -48,15 +48,15 @@ required on the WebView side
 ### generatePassiveView(...)
 
 ```typescript
-generatePassiveView(options: { dataId: number; overwriteOldEvents: boolean; addressableName?: string; }) => Promise<void>
+generatePassiveView(options: { dataId: number; addressableName?: string; }) => Promise<void>
 ```
 
 Generates an active view on the side of android: The view will not pass data on a callback so active polling is
 required on the WebView side
 
-| Param         | Type                                                                                    |
-| ------------- | --------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ dataId: number; overwriteOldEvents: boolean; addressableName?: string; }</code> |
+| Param         | Type                                                       |
+| ------------- | ---------------------------------------------------------- |
+| **`options`** | <code>{ dataId: number; addressableName?: string; }</code> |
 
 --------------------
 
