@@ -1,5 +1,4 @@
 package io.ionic.plugins.aaosdatautils.dataview;
-
 import com.getcapacitor.JSArray;
 
 import io.ionic.plugins.aaosdatautils.dataevent.DataEvent;

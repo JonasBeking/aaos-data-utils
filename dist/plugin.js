@@ -6,24 +6,31 @@ var capacitorAAOSDataUtils = (function (exports) {
             this.dataService = dataService;
         }
         generateActiveView(dataId, callback, addressableName) {
-            console.log("Attempting to generate active view");
             return this.dataService.generateActiveView({
                 dataId: dataId,
                 addressableName: addressableName
             }, ((dataEvent, err) => {
                 if (err) {
-                    console.error(`Failed getting value for propertyId: ${dataId} - ${addressableName}`);
-                    callback(dataEvent, err);
+                    const errorEvent = JSON.parse(err);
+                    console.error(`Failed getting value for propertyId: ${dataId} - ${addressableName} due to ${err}`);
+                    callback(dataEvent, errorEvent);
                 }
                 else {
-                    console.log(`Received value: ${JSON.stringify(dataEvent)} for propertyId: ${dataId} - ${addressableName}`);
+                    console.debug(`Received value: ${JSON.stringify(dataEvent)} for propertyId: ${dataId} - ${addressableName}`);
                     callback(dataEvent);
                 }
             })).then(() => {
-                console.log(`Successfully registered Active Property View for propertyId: ${dataId} - ${addressableName}`);
+                console.debug(`Requested Active Property View for propertyId: ${dataId} - ${addressableName}`);
             }).catch(errorEvent => {
                 console.error(`Failed registering Active Property View for propertyId: ${dataId} - ${addressableName}. Reason: ${errorEvent}`);
-                throw JSON.parse(errorEvent);
+                let throwable;
+                try {
+                    throwable = JSON.parse(errorEvent);
+                }
+                catch (e) {
+                    throwable = errorEvent;
+                }
+                throw throwable;
             });
         }
         generatePassiveView(dataId, addressableName) {
@@ -31,25 +38,39 @@ var capacitorAAOSDataUtils = (function (exports) {
                 dataId: dataId,
                 addressableName: addressableName
             }).then(() => {
-                console.log(`Successfully registered Passive Property View for propertyId: ${dataId} - ${addressableName}`);
+                console.debug(`Successfully registered Passive Property View for propertyId: ${dataId} - ${addressableName}`);
             }).catch(errorEvent => {
                 console.error(`Failed registering Passive Property View for propertyId: ${dataId} - ${addressableName}. Reason: ${errorEvent}`);
-                throw JSON.parse(errorEvent);
+                let throwable;
+                try {
+                    throwable = JSON.parse(errorEvent);
+                }
+                catch (e) {
+                    throwable = errorEvent;
+                }
+                throw throwable;
             });
         }
         removeView(addressableName) {
             return this.dataService.removeView({
                 addressableName: addressableName
             }).then(() => {
-                console.log(`Removed View for ${addressableName}`);
+                console.debug(`Removed View for ${addressableName}`);
             }).catch(errorEvent => {
                 console.error(`Failed removing View for ${addressableName}. Reason: ${errorEvent}`);
-                throw JSON.parse(errorEvent);
+                let throwable;
+                try {
+                    throwable = JSON.parse(errorEvent);
+                }
+                catch (e) {
+                    throwable = errorEvent;
+                }
+                throw throwable;
             });
         }
         view(addressableName) {
             return this.dataService.view({ addressableName: addressableName }).then((event) => {
-                console.log(`Received value: ${JSON.stringify(event)} for ${addressableName}`);
+                console.debug(`Received value: ${JSON.stringify(event)} for ${addressableName}`);
                 if (event.event === -1) {
                     return event;
                 }
@@ -58,16 +79,30 @@ var capacitorAAOSDataUtils = (function (exports) {
                 }
             }).catch(errorEvent => {
                 console.error(`Failed receiving value for ${addressableName}. Reason ${errorEvent}`);
-                throw JSON.parse(errorEvent);
+                let throwable;
+                try {
+                    throwable = JSON.parse(errorEvent);
+                }
+                catch (e) {
+                    throwable = errorEvent;
+                }
+                throw throwable;
             });
         }
         viewAll(addressableName) {
             return this.dataService.viewAll({ addressableName: addressableName }).then(({ events }) => {
-                console.log(`Received value: ${JSON.stringify(events)} for ${addressableName}`);
+                console.debug(`Received value: ${JSON.stringify(events)} for ${addressableName}`);
                 return events;
             }).catch(errorEvent => {
                 console.error(`Failed receiving value for ${addressableName}. Reason ${errorEvent}`);
-                throw JSON.parse(errorEvent);
+                let throwable;
+                try {
+                    throwable = JSON.parse(errorEvent);
+                }
+                catch (e) {
+                    throwable = errorEvent;
+                }
+                throw throwable;
             });
         }
     }
@@ -78,22 +113,36 @@ var capacitorAAOSDataUtils = (function (exports) {
         }
         checkPermissions() {
             return this.dataService.checkPermissions().then(permissionStatus => {
-                console.log(`Current Permissionsstatus: ${JSON.stringify(permissionStatus)}`);
+                console.debug(`Current status of permissions: ${JSON.stringify(permissionStatus)}`);
                 return permissionStatus;
             }).catch(reason => {
-                console.error(`Failed checking current PermissionStatus. Reason: ${reason}`);
-                return null;
+                console.error(`Failed checking current status for permissions. Reason: ${reason}`);
+                let throwable;
+                try {
+                    throwable = JSON.parse(reason);
+                }
+                catch (e) {
+                    throwable = reason;
+                }
+                throw throwable;
             });
         }
         requestPermissions(permissions) {
             return this.dataService.requestPermissions({
                 permissions: permissions
             }).then(permissionStatus => {
-                console.log(`Current PermissionStatus: ${JSON.stringify(permissionStatus)}`);
+                console.debug(`Current PermissionStatus: ${JSON.stringify(permissionStatus)}`);
                 return permissionStatus;
             }).catch(reason => {
                 console.error(`Failed requesting Permissions. Reason: ${reason}`);
-                return null;
+                let throwable;
+                try {
+                    throwable = JSON.parse(reason);
+                }
+                catch (e) {
+                    throwable = reason;
+                }
+                throw throwable;
             });
         }
     }

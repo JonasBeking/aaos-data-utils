@@ -1,4 +1,5 @@
 package io.ionic.plugins.aaosdatautils.dataview;
+import android.util.Log;
 
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
@@ -15,9 +16,12 @@ public abstract class DataViewManager<T> {
     protected DataCallbackBuilder<T> dataCallbackBuilder;
 
     public DataView<T> generate(PluginCall pluginCall, String addressableName, Boolean isActive) {
-        DataView<T> dataView = isActive ? new ActiveDataView<>(pluginCall, null) : new PassiveDataView<>(null);
+        DataView<T> dataView = isActive ? new ActiveDataView<>(pluginCall, -1) : new PassiveDataView<>(-1);
+
         T callback = this.dataCallbackBuilder.build(dataView);
+
         dataView.setCallback(callback);
+
         if(addressableName == null) {
             throw new IllegalArgumentException("AddressableName for DataView must not be null");
         }

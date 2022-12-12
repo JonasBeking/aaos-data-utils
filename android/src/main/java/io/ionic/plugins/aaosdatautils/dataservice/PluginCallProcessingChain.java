@@ -1,5 +1,7 @@
 package io.ionic.plugins.aaosdatautils.dataservice;
 
+import android.util.Log;
+
 import com.getcapacitor.PluginCall;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class PluginCallProcessingChain {
 
     public PluginCallProcessingChain(DataErrorHandler dataErrorHandler) {
         this.dataErrorHandler = dataErrorHandler;
+        Log.e("PluginCallProcessingChain","Loading the data error handler: " + this.dataErrorHandler);
     }
 
     public PluginCallProcessingChain add(PluginCallProcessor processor) {

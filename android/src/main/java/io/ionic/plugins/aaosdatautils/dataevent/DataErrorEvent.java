@@ -1,5 +1,4 @@
 package io.ionic.plugins.aaosdatautils.dataevent;
-
 public class DataErrorEvent extends DataEvent {
 
     public DataErrorEvent(String reason) {

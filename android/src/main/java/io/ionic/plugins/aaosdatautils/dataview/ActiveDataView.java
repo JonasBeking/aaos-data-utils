@@ -1,4 +1,5 @@
 package io.ionic.plugins.aaosdatautils.dataview;
+import android.util.Log;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
@@ -23,8 +24,7 @@ public class ActiveDataView<T> extends DataView<T> {
     public void resolvePluginCall() {
         DataEvent dataEvent = this.getMostRecentEvent();
         if(dataEvent == null) {
-            new DataErrorEvent("No value for dataId: " + this.dataId + "currently available");
-            return;
+            dataEvent = new DataErrorEvent("No value for dataId: " + this.dataId + "currently available");
         }
         if(dataEvent instanceof DataErrorEvent) {
             this.pluginCall.errorCallback(dataEvent.toString());

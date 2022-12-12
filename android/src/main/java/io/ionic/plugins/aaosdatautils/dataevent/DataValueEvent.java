@@ -1,5 +1,4 @@
 package io.ionic.plugins.aaosdatautils.dataevent;
-
 import android.util.NoSuchPropertyException;
 
 import com.getcapacitor.JSObject;

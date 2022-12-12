@@ -11,7 +11,7 @@ export declare abstract class VehicleDataProxy<VehicleDataEventType extends Vehi
 export declare abstract class RestrictedVehicleDataProxy<VehicleDataEventType extends VehicleDataEvent, VehicleErrorEventType extends VehicleErrorEvent, PermissionType extends string> extends VehicleDataProxy<VehicleDataEventType, VehicleErrorEventType> {
     dataService: RestrictedVehicleDataService<VehicleDataEventType, VehicleErrorEventType, PermissionType>;
     protected constructor(dataService: RestrictedVehicleDataService<VehicleDataEventType, VehicleErrorEventType, PermissionType>);
-    checkPermissions(): Promise<PermissionStates<PermissionType> | null>;
-    requestPermissions(permissions: PermissionType[]): Promise<PermissionStates<PermissionType> | null>;
+    checkPermissions(): Promise<PermissionStates<PermissionType>>;
+    requestPermissions(permissions: PermissionType[]): Promise<PermissionStates<PermissionType>>;
 }
 export * from './definitions';

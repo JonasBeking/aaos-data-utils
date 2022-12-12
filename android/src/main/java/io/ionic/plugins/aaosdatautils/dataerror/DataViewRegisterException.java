@@ -1,5 +1,4 @@
 package io.ionic.plugins.aaosdatautils.dataerror;
-
 import androidx.annotation.NonNull;
 
 public class DataViewRegisterException extends RuntimeException{

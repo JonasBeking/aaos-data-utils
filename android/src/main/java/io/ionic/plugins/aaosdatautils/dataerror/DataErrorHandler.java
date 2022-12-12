@@ -1,6 +1,4 @@
 package io.ionic.plugins.aaosdatautils.dataerror;
-
-
 import com.getcapacitor.PluginCall;
 
 import io.ionic.plugins.aaosdatautils.dataevent.DataErrorEvent;
